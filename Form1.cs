@@ -17,14 +17,22 @@ namespace statki
             PlayerButtons();
             GenerateLabels();
             //CreateBotButtons();
-            int areaX, areaY, direction, previousPlace;
+            int areaX, areaY, direction;
             bool placed;
-            string[,] areas = new string[10, 10];
+            string[,] areasBot = new string[10, 10];
+            string[,]areasPlayer = new string[10, 10];
             for (int x = 0; x < 10; x++)
             {
                 for (int y = 0; y < 10; y++)
                 {
-                    areas[x, y] = "Empty";
+                    areasBot[x, y] = Condition.Empty.ToString();
+                }
+            }
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    areasPlayer[x, y] = Condition.Empty.ToString();
                 }
             }
             Random shipPosition = new Random();
@@ -49,13 +57,13 @@ namespace statki
                     areaX = shipPosition.Next(0, 10);
                     areaY = shipPosition.Next(0, 10);
                     //CanPlaceShip(areaX, areaY, areas);
-                    if (CanPlaceShip1(areaX, areaY, areas))
+                    if (CanPlaceShip1(areaX, areaY, areasBot))
                     {
                         placed = true;
                         int index = areaY * 10 + areaX;
                         Button buttonToChange = (Button)this.Controls[index];
                         buttonToChange.BackColor = System.Drawing.Color.Red;
-                        areas[areaX, areaY] = Condition.Ship.ToString();
+                        areasBot[areaX, areaY] = Condition.Ship.ToString();
 
 
                     }
@@ -70,11 +78,11 @@ namespace statki
                     areaX = shipPosition.Next(0, 10);
                     areaY = shipPosition.Next(0, 10);
                     direction = shipDirection.Next(0, 2);
-                    if (CanPlaceShip1(areaX, areaY, areas))
+                    if (CanPlaceShip1(areaX, areaY, areasBot))
                     {
                         if (direction == 0)//poziom
                         {
-                            if (CanPlaceShip1(areaX - 1, areaY, areas))
+                            if (CanPlaceShip1(areaX - 1, areaY, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -83,10 +91,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 buttonToChange1.BackColor = System.Drawing.Color.Red;
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX - 1, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX - 1, areaY] = Condition.Ship.ToString();
                             }
-                            else if (CanPlaceShip1(areaX + 1, areaY, areas))
+                            else if (CanPlaceShip1(areaX + 1, areaY, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -95,13 +103,13 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 buttonToChange1.BackColor = System.Drawing.Color.Red;
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX + 1, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX + 1, areaY] = Condition.Ship.ToString();
                             }
                         }
                         if (direction == 1) //pion
                         {
-                            if (CanPlaceShip1(areaX, areaY - 1, areas))
+                            if (CanPlaceShip1(areaX, areaY - 1, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -110,10 +118,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 buttonToChange1.BackColor = System.Drawing.Color.Red;
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX, areaY - 1] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY - 1] = Condition.Ship.ToString();
                             }
-                            else if (CanPlaceShip1(areaX, areaY + 1, areas))
+                            else if (CanPlaceShip1(areaX, areaY + 1, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -122,8 +130,8 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 buttonToChange1.BackColor = System.Drawing.Color.Red;
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX, areaY + 1] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY + 1] = Condition.Ship.ToString();
 
                             }
                         }
@@ -143,11 +151,11 @@ namespace statki
                     areaX = shipPosition.Next(0, 10);
                     areaY = shipPosition.Next(0, 10);
                     direction = shipDirection.Next(0, 2);//kierunek
-                    if (CanPlaceShip1(areaX, areaY, areas))
+                    if (CanPlaceShip1(areaX, areaY, areasBot))
                     {
                         if (direction == 0)//poziom
                         {
-                            if (CanPlaceShip1(areaX - 2, areaY, areas))
+                            if (CanPlaceShip1(areaX - 2, areaY, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -159,11 +167,11 @@ namespace statki
                                 buttonToChange1.BackColor = System.Drawing.Color.Red;
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX - 1, areaY] = Condition.Ship.ToString();
-                                areas[areaX - 2, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX - 1, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX - 2, areaY] = Condition.Ship.ToString();
                             }
-                            else if (CanPlaceShip1(areaX + 2, areaY, areas))
+                            else if (CanPlaceShip1(areaX + 2, areaY, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -175,14 +183,14 @@ namespace statki
                                 buttonToChange1.BackColor = System.Drawing.Color.Red;
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX + 1, areaY] = Condition.Ship.ToString();
-                                areas[areaX + 2, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX + 1, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX + 2, areaY] = Condition.Ship.ToString();
                             }
                         }
                         if (direction == 1)//pion
                         {
-                            if (CanPlaceShip1(areaX, areaY - 2, areas))
+                            if (CanPlaceShip1(areaX, areaY - 2, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -194,11 +202,11 @@ namespace statki
                                 buttonToChange1.BackColor = System.Drawing.Color.Red;
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX, areaY - 1] = Condition.Ship.ToString();
-                                areas[areaX, areaY - 2] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY - 1] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY - 2] = Condition.Ship.ToString();
                             }
-                            else if (CanPlaceShip1(areaX, areaY + 2, areas))
+                            else if (CanPlaceShip1(areaX, areaY + 2, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -210,9 +218,9 @@ namespace statki
                                 buttonToChange1.BackColor = System.Drawing.Color.Red;
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX, areaY + 1] = Condition.Ship.ToString();
-                                areas[areaX, areaY + 2] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY + 1] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY + 2] = Condition.Ship.ToString();
                             }
                         }
                     }
@@ -227,11 +235,11 @@ namespace statki
                     areaX = shipPosition.Next(0, 10);
                     areaY = shipPosition.Next(0, 10);
                     direction = shipDirection.Next(0, 2);//kierunek
-                    if (CanPlaceShip1(areaX, areaY, areas))
+                    if (CanPlaceShip1(areaX, areaY, areasBot))
                     {
                         if (direction == 0)//poziom
                         {
-                            if (CanPlaceShip1(areaX - 3, areaY, areas))
+                            if (CanPlaceShip1(areaX - 3, areaY, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -246,12 +254,12 @@ namespace statki
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
                                 buttonToChange4.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX - 1, areaY] = Condition.Ship.ToString();
-                                areas[areaX - 2, areaY] = Condition.Ship.ToString();
-                                areas[areaX - 3, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX - 1, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX - 2, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX - 3, areaY] = Condition.Ship.ToString();
                             }
-                            else if (CanPlaceShip1(areaX + 3, areaY, areas))
+                            else if (CanPlaceShip1(areaX + 3, areaY, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -266,15 +274,15 @@ namespace statki
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
                                 buttonToChange4.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX + 1, areaY] = Condition.Ship.ToString();
-                                areas[areaX + 2, areaY] = Condition.Ship.ToString();
-                                areas[areaX + 3, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX + 1, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX + 2, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX + 3, areaY] = Condition.Ship.ToString();
                             }
                         }
                         if (direction == 1)//pion
                         {
-                            if (CanPlaceShip1(areaX, areaY - 3, areas))
+                            if (CanPlaceShip1(areaX, areaY - 3, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -289,12 +297,12 @@ namespace statki
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
                                 buttonToChange4.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX, areaY - 1] = Condition.Ship.ToString();
-                                areas[areaX, areaY - 2] = Condition.Ship.ToString();
-                                areas[areaX, areaY - 3] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY - 1] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY - 2] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY - 3] = Condition.Ship.ToString();
                             }
-                            else if (CanPlaceShip1(areaX, areaY + 3, areas))
+                            else if (CanPlaceShip1(areaX, areaY + 3, areasBot))
                             {
                                 placed = true;
                                 int index1 = areaY * 10 + areaX;
@@ -309,16 +317,299 @@ namespace statki
                                 buttonToChange2.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
                                 buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                areas[areaX, areaY] = Condition.Ship.ToString();
-                                areas[areaX, areaY + 1] = Condition.Ship.ToString();
-                                areas[areaX, areaY + 2] = Condition.Ship.ToString();
-                                areas[areaX, areaY + 3] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY + 1] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY + 2] = Condition.Ship.ToString();
+                                areasBot[areaX, areaY + 3] = Condition.Ship.ToString();
                             }
                         }
                     }
                 }
             }
 
+            //Gracz
+            //
+            //
+            //
+            //
+            //jedynki Gracz
+            for (int i = 0; i < ship1Player.ship1Count; i++)
+            {
+                placed = false;
+                while (!placed)
+                {
+                    areaX = shipPosition.Next(0, 10);
+                    areaY = shipPosition.Next(0, 10);
+                    //CanPlaceShip(areaX, areaY, areas);
+                    if (CanPlaceShip1(areaX, areaY, areasPlayer))
+                    {
+                        placed = true;
+                        int index = areaY * 10 + areaX + 100;
+                        Button buttonToChange = (Button)this.Controls[index];
+                        buttonToChange.BackColor = System.Drawing.Color.Red;
+                        areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+
+
+                    }
+                }
+            }
+            //dwojki Gracz
+            for (int i = 0; i < ship2Player.ship2Count; i++)
+            {
+                placed = false;
+                while (!placed)
+                {
+                    areaX = shipPosition.Next(0, 10);
+                    areaY = shipPosition.Next(0, 10);
+                    direction = shipDirection.Next(0, 2);
+                    if (CanPlaceShip1(areaX, areaY, areasPlayer))
+                    {
+                        if (direction == 0)//poziom
+                        {
+                            if (CanPlaceShip1(areaX - 1, areaY, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = areaY * 10 + areaX - 1 + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX - 1, areaY] = Condition.Ship.ToString();
+                            }
+                            else if (CanPlaceShip1(areaX + 1, areaY, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = areaY * 10 + areaX + 1 + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX + 1, areaY] = Condition.Ship.ToString();
+                            }
+                        }
+                        if (direction == 1) //pion
+                        {
+                            if (CanPlaceShip1(areaX, areaY - 1, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = (areaY - 1) * 10 + areaX + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY - 1] = Condition.Ship.ToString();
+                            }
+                            else if (CanPlaceShip1(areaX, areaY + 1, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = (areaY + 1) * 10 + areaX + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY + 1] = Condition.Ship.ToString();
+
+                            }
+                        }
+
+                    }
+
+                    //CanPlaceShip2(areaX - 1, areaY, areas);
+                }
+            }
+
+            //trojki bot
+            for (int i = 0; i < ship3Player.ship3Count; i++)
+            {
+                placed = false;
+                while (!placed)
+                {
+                    areaX = shipPosition.Next(0, 10);
+                    areaY = shipPosition.Next(0, 10);
+                    direction = shipDirection.Next(0, 2);//kierunek
+                    if (CanPlaceShip1(areaX, areaY, areasPlayer))
+                    {
+                        if (direction == 0)//poziom
+                        {
+                            if (CanPlaceShip1(areaX - 2, areaY, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = areaY * 10 + areaX - 1 + 100;
+                                int index3 = areaY * 10 + areaX - 2 + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                Button buttonToChange3 = (Button)this.Controls[index3];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX - 1, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX - 2, areaY] = Condition.Ship.ToString();
+                            }
+                            else if (CanPlaceShip1(areaX + 2, areaY, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = areaY * 10 + areaX + 1 + 100;
+                                int index3 = areaY * 10 + areaX + 2 + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                Button buttonToChange3 = (Button)this.Controls[index3];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX + 1, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX + 2, areaY] = Condition.Ship.ToString();
+                            }
+                        }
+                        if (direction == 1)//pion
+                        {
+                            if (CanPlaceShip1(areaX, areaY - 2, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = (areaY - 1) * 10 + areaX + 100;
+                                int index3 = (areaY - 2) * 10 + areaX + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                Button buttonToChange3 = (Button)this.Controls[index3];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY - 1] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY - 2] = Condition.Ship.ToString();
+                            }
+                            else if (CanPlaceShip1(areaX, areaY + 2, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = (areaY + 1) * 10 + areaX + 100;
+                                int index3 = (areaY + 2) * 10 + areaX + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                Button buttonToChange3 = (Button)this.Controls[index3];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY + 1] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY + 2] = Condition.Ship.ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            //czworki bot
+            for (int i = 0; i < ship4Player.ship4Count; i++)
+            {
+                placed = false;
+                while (!placed)
+                {
+                    areaX = shipPosition.Next(0, 10);
+                    areaY = shipPosition.Next(0, 10);
+                    direction = shipDirection.Next(0, 2);//kierunek
+                    if (CanPlaceShip1(areaX, areaY, areasPlayer))
+                    {
+                        if (direction == 0)//poziom
+                        {
+                            if (CanPlaceShip1(areaX - 3, areaY, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = areaY * 10 + areaX - 1 + 100;
+                                int index3 = areaY * 10 + areaX - 2 + 100;
+                                int index4 = areaY * 10 + areaX - 3 + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                Button buttonToChange3 = (Button)this.Controls[index3];
+                                Button buttonToChange4 = (Button)this.Controls[index4];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX - 1, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX - 2, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX - 3, areaY] = Condition.Ship.ToString();
+                            }
+                            else if (CanPlaceShip1(areaX + 3, areaY, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100 ;
+                                int index2 = areaY * 10 + areaX + 1 + 100;
+                                int index3 = areaY * 10 + areaX + 2 + 100;
+                                int index4 = areaY * 10 + areaX + 3 + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                Button buttonToChange3 = (Button)this.Controls[index3];
+                                Button buttonToChange4 = (Button)this.Controls[index4];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX + 1, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX + 2, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX + 3, areaY] = Condition.Ship.ToString();
+                            }
+                        }
+                        if (direction == 1)//pion
+                        {
+                            if (CanPlaceShip1(areaX, areaY - 3, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX + 100;
+                                int index2 = (areaY - 1) * 10 + areaX + 100;
+                                int index3 = (areaY - 2) * 10 + areaX + 100;
+                                int index4 = (areaY - 3) * 10 + areaX +100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                Button buttonToChange3 = (Button)this.Controls[index3];
+                                Button buttonToChange4 = (Button)this.Controls[index4];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY - 1] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY - 2] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY - 3] = Condition.Ship.ToString();
+                            }
+                            else if (CanPlaceShip1(areaX, areaY + 3, areasPlayer))
+                            {
+                                placed = true;
+                                int index1 = areaY * 10 + areaX;
+                                int index2 = (areaY + 1) * 10 + areaX + 100;
+                                int index3 = (areaY + 2) * 10 + areaX + 100;
+                                int index4 = (areaY + 3) * 10 + areaX + 100;
+                                Button buttonToChange1 = (Button)this.Controls[index1];
+                                Button buttonToChange2 = (Button)this.Controls[index2];
+                                Button buttonToChange3 = (Button)this.Controls[index3];
+                                Button buttonToChange4 = (Button)this.Controls[index4];
+                                buttonToChange1.BackColor = System.Drawing.Color.Red;
+                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                areasPlayer[areaX, areaY] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY + 1] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY + 2] = Condition.Ship.ToString();
+                                areasPlayer[areaX, areaY + 3] = Condition.Ship.ToString();
+                            }
+                        }
+                    }
+                }
+            }
 
         }
      
