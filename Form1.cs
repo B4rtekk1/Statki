@@ -688,21 +688,38 @@ namespace statki
                 
                 if (areasBot[positionX, positionY] == Condition.Ship.ToString())
                 {
-                    clickedButton.BackColor = Color.Orange;
+                    if(ShipSunk(positionX, positionY))
+                    {
+                        clickedButton.BackColor = Color.Red;
+                    }
+                    else
+                    {
+                        clickedButton.BackColor = Color.Orange;
+                    }
+                    
                 }
-            }
-            else
-            {
-                positionX = ((int)clickedButton.Tag - 100) % 10;
-                positionY = (((int)clickedButton.Tag - 100) - positionX) / 10;
-                //potem usunac
-                if (areasPlayer[positionX, positionY] == Condition.Ship.ToString())
+                if (areasBot[positionX, positionY] == Condition.Empty.ToString())
                 {
-                    clickedButton.BackColor = Color.Orange;
+                    clickedButton.BackColor= Color.Gray;
                 }
             }
             MessageBox.Show($"Klikniêto przycisk o indeksie {clickedButton.Tag}");
-        }                      
+        }                     
+        bool ShipSunk(int x, int y)
+        {
+            if (x >= 0 && x < 10 && y >= 0 && y < 10)
+            {
+                bool sunk = true;
+
+                if (x > 0) sunk &= areasBot[x - 1, y] == Condition.Ship.ToString();
+                if (x < 9) sunk &= areasBot[x + 1, y] == Condition.Ship.ToString();
+                if (y > 0) sunk &= areasBot[x, y - 1] == Condition.Ship.ToString();
+                if (y < 9) sunk &= areasBot[x, y + 1] == Condition.Ship.ToString();
+                return sunk;
+            }
+
+            return true; 
+        }
                 
         void GenerateLabels()
         {
