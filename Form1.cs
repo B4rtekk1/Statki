@@ -13,7 +13,10 @@ namespace statki
         public Form1()
         {
             InitializeComponent();
-            CreatePlayerButtons();   
+            CreateBotButtons();
+            PlayerButtons();
+            GenerateLabels();
+            //CreateBotButtons();
             int areaX, areaY, direction, previousPlace;
             bool placed;
             string[,] areas = new string[10, 10];
@@ -32,12 +35,16 @@ namespace statki
             Ship ship2 = new Ship();
             Ship ship3 = new Ship();
             Ship ship4 = new Ship();
+            Ship ship1Player = new Ship();
+            Ship ship2Player = new Ship();
+            Ship ship3Player = new Ship();
+            Ship ship4Player = new Ship();
 
-            //jedynki
+            //jedynki bot
             for (int i = 0; i < ship1.ship1Count; i++)
             {
                 placed = false;
-                while(!placed)
+                while (!placed)
                 {
                     areaX = shipPosition.Next(0, 10);
                     areaY = shipPosition.Next(0, 10);
@@ -54,7 +61,7 @@ namespace statki
                     }
                 }
             }
-            //dwojki
+            //dwojki bot
             for (int i = 0; i < ship2.ship2Count; i++)
             {
                 placed = false;
@@ -62,10 +69,10 @@ namespace statki
                 {
                     areaX = shipPosition.Next(0, 10);
                     areaY = shipPosition.Next(0, 10);
-                    direction = shipDirection.Next(0,2);
+                    direction = shipDirection.Next(0, 2);
                     if (CanPlaceShip1(areaX, areaY, areas))
                     {
-                        if(direction == 0)//poziom
+                        if (direction == 0)//poziom
                         {
                             if (CanPlaceShip1(areaX - 1, areaY, areas))
                             {
@@ -92,7 +99,7 @@ namespace statki
                                 areas[areaX + 1, areaY] = Condition.Ship.ToString();
                             }
                         }
-                        if(direction == 1) //pion
+                        if (direction == 1) //pion
                         {
                             if (CanPlaceShip1(areaX, areaY - 1, areas))
                             {
@@ -120,14 +127,14 @@ namespace statki
 
                             }
                         }
-                                                
+
                     }
 
                     //CanPlaceShip2(areaX - 1, areaY, areas);
                 }
             }
 
-            //trojki
+            //trojki bot
             for (int i = 0; i < ship3.ship3Count; i++)
             {
                 placed = false;
@@ -138,7 +145,7 @@ namespace statki
                     direction = shipDirection.Next(0, 2);//kierunek
                     if (CanPlaceShip1(areaX, areaY, areas))
                     {
-                        if(direction == 0)//poziom
+                        if (direction == 0)//poziom
                         {
                             if (CanPlaceShip1(areaX - 2, areaY, areas))
                             {
@@ -173,7 +180,7 @@ namespace statki
                                 areas[areaX + 2, areaY] = Condition.Ship.ToString();
                             }
                         }
-                        if(direction == 1)//pion
+                        if (direction == 1)//pion
                         {
                             if (CanPlaceShip1(areaX, areaY - 2, areas))
                             {
@@ -207,11 +214,11 @@ namespace statki
                                 areas[areaX, areaY + 1] = Condition.Ship.ToString();
                                 areas[areaX, areaY + 2] = Condition.Ship.ToString();
                             }
-                        }                                               
+                        }
                     }
                 }
             }
-            //czworki
+            //czworki bot
             for (int i = 0; i < ship4.ship4Count; i++)
             {
                 placed = false;
@@ -314,7 +321,32 @@ namespace statki
 
 
         }
-        void CreatePlayerButtons()
+     
+        void CreateBotButtons()
+        {
+            int buttonSize = 25;
+            int buttonsPerRow = 10;
+            int marginX = 420;
+            int marginY = 50;
+            int labelPositionX = buttonsPerRow * buttonSize + marginX;
+            int labelPositionY = marginY / 2;
+
+            for (int i = 0; i < 100; i++)
+            {
+                Button btn = new Button();
+                btn.Width = buttonSize;
+                btn.Height = buttonSize;
+                btn.BackColor = System.Drawing.Color.LightBlue;
+                int row = i / buttonsPerRow;
+                int col = i % buttonsPerRow;
+                btn.Left = col * (buttonSize) + marginX;
+                btn.Top = row * (buttonSize) + marginY;
+                btn.Text = "";
+                btn.Click += Button_Click;
+                this.Controls.Add(btn);
+            }
+        }
+        void PlayerButtons()
         {
             int buttonSize = 25;
             int buttonsPerRow = 10;
@@ -334,9 +366,13 @@ namespace statki
                 btn.Left = col * (buttonSize) + marginX;
                 btn.Top = row * (buttonSize) + marginY;
                 btn.Text = "";
-                btn.Click += Button_Click;
+                //btn.Click += Button_Click;
                 this.Controls.Add(btn);
             }
+        }
+        void GenerateLabels()
+        {
+
         }
         void Button_Click(object sender, EventArgs e)
         {

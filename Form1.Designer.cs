@@ -34,7 +34,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 568);
+            ClientSize = new Size(800, 573);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
