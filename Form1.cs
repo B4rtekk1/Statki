@@ -10,17 +10,38 @@ namespace statki
 {
     public partial class Form1 : Form
     {
+        string[,] areasBot = new string[10, 10];
+        string[,] areasPlayer = new string[10, 10];
+        int areaX, areaY, direction;
+        bool placed;
+        Random shipPosition = new Random();
+        Random shipDirection = new Random();
+
+
+        Ship ship1 = new Ship();
+        Ship ship2 = new Ship();
+        Ship ship3 = new Ship();
+        Ship ship4 = new Ship();
+        Ship ship1Player = new Ship();
+        Ship ship2Player = new Ship();
+        Ship ship3Player = new Ship();
+        Ship ship4Player = new Ship();
         public Form1()
         {
             InitializeComponent();
+            TableImplementation();
             CreateBotButtons();
             PlayerButtons();
+            GenerateBotShips();
+            GeneratePlayerShips();
             GenerateLabels();
             //CreateBotButtons();
-            int areaX, areaY, direction;
-            bool placed;
-            string[,] areasBot = new string[10, 10];
-            string[,]areasPlayer = new string[10, 10];
+            
+            
+        }
+          
+        void TableImplementation()
+        {
             for (int x = 0; x < 10; x++)
             {
                 for (int y = 0; y < 10; y++)
@@ -35,20 +56,10 @@ namespace statki
                     areasPlayer[x, y] = Condition.Empty.ToString();
                 }
             }
-            Random shipPosition = new Random();
-            Random shipDirection = new Random();
+        }
 
-
-            Ship ship1 = new Ship();
-            Ship ship2 = new Ship();
-            Ship ship3 = new Ship();
-            Ship ship4 = new Ship();
-            Ship ship1Player = new Ship();
-            Ship ship2Player = new Ship();
-            Ship ship3Player = new Ship();
-            Ship ship4Player = new Ship();
-
-            //jedynki bot
+        void GenerateBotShips()
+        {
             for (int i = 0; i < ship1.ship1Count; i++)
             {
                 placed = false;
@@ -62,7 +73,7 @@ namespace statki
                         placed = true;
                         int index = areaY * 10 + areaX;
                         Button buttonToChange = (Button)this.Controls[index];
-                        buttonToChange.BackColor = System.Drawing.Color.Red;
+                        buttonToChange.BackColor = System.Drawing.Color.Green;
                         areasBot[areaX, areaY] = Condition.Ship.ToString();
 
 
@@ -89,8 +100,8 @@ namespace statki
                                 int index2 = areaY * 10 + areaX - 1;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 1, areaY] = Condition.Ship.ToString();
                             }
@@ -101,8 +112,8 @@ namespace statki
                                 int index2 = areaY * 10 + areaX + 1;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 1, areaY] = Condition.Ship.ToString();
                             }
@@ -116,8 +127,8 @@ namespace statki
                                 int index2 = (areaY - 1) * 10 + areaX;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 1] = Condition.Ship.ToString();
                             }
@@ -128,8 +139,8 @@ namespace statki
                                 int index2 = (areaY + 1) * 10 + areaX;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 1] = Condition.Ship.ToString();
 
@@ -164,9 +175,9 @@ namespace statki
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 1, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 2, areaY] = Condition.Ship.ToString();
@@ -180,9 +191,9 @@ namespace statki
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 1, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 2, areaY] = Condition.Ship.ToString();
@@ -199,9 +210,9 @@ namespace statki
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 1] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 2] = Condition.Ship.ToString();
@@ -215,9 +226,9 @@ namespace statki
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 1] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 2] = Condition.Ship.ToString();
@@ -250,10 +261,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
                                 Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
+                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 1, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 2, areaY] = Condition.Ship.ToString();
@@ -270,10 +281,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
                                 Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
+                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 1, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 2, areaY] = Condition.Ship.ToString();
@@ -293,10 +304,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
                                 Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
+                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 1] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 2] = Condition.Ship.ToString();
@@ -313,10 +324,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
                                 Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
+                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 1] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 2] = Condition.Ship.ToString();
@@ -326,13 +337,11 @@ namespace statki
                     }
                 }
             }
+        }
 
-            //Gracz
-            //
-            //
-            //
-            //
-            //jedynki Gracz
+
+        void GeneratePlayerShips()
+        {
             for (int i = 0; i < ship1Player.ship1Count; i++)
             {
                 placed = false;
@@ -346,7 +355,7 @@ namespace statki
                         placed = true;
                         int index = areaY * 10 + areaX + 100;
                         Button buttonToChange = (Button)this.Controls[index];
-                        buttonToChange.BackColor = System.Drawing.Color.Red;
+                        buttonToChange.BackColor = System.Drawing.Color.Green;
                         areasPlayer[areaX, areaY] = Condition.Ship.ToString();
 
 
@@ -373,8 +382,8 @@ namespace statki
                                 int index2 = areaY * 10 + areaX - 1 + 100;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX - 1, areaY] = Condition.Ship.ToString();
                             }
@@ -385,8 +394,8 @@ namespace statki
                                 int index2 = areaY * 10 + areaX + 1 + 100;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX + 1, areaY] = Condition.Ship.ToString();
                             }
@@ -400,8 +409,8 @@ namespace statki
                                 int index2 = (areaY - 1) * 10 + areaX + 100;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY - 1] = Condition.Ship.ToString();
                             }
@@ -412,8 +421,8 @@ namespace statki
                                 int index2 = (areaY + 1) * 10 + areaX + 100;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY + 1] = Condition.Ship.ToString();
 
@@ -426,7 +435,7 @@ namespace statki
                 }
             }
 
-            //trojki bot
+            //trojki gracz
             for (int i = 0; i < ship3Player.ship3Count; i++)
             {
                 placed = false;
@@ -448,9 +457,9 @@ namespace statki
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX - 1, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX - 2, areaY] = Condition.Ship.ToString();
@@ -464,9 +473,9 @@ namespace statki
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX + 1, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX + 2, areaY] = Condition.Ship.ToString();
@@ -483,9 +492,9 @@ namespace statki
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY - 1] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY - 2] = Condition.Ship.ToString();
@@ -499,9 +508,9 @@ namespace statki
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY + 1] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY + 2] = Condition.Ship.ToString();
@@ -510,7 +519,7 @@ namespace statki
                     }
                 }
             }
-            //czworki bot
+            //czworki gracz
             for (int i = 0; i < ship4Player.ship4Count; i++)
             {
                 placed = false;
@@ -534,10 +543,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
                                 Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
+                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX - 1, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX - 2, areaY] = Condition.Ship.ToString();
@@ -546,7 +555,7 @@ namespace statki
                             else if (CanPlaceShip1(areaX + 3, areaY, areasPlayer))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX + 100 ;
+                                int index1 = areaY * 10 + areaX + 100;
                                 int index2 = areaY * 10 + areaX + 1 + 100;
                                 int index3 = areaY * 10 + areaX + 2 + 100;
                                 int index4 = areaY * 10 + areaX + 3 + 100;
@@ -554,10 +563,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
                                 Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
+                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX + 1, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX + 2, areaY] = Condition.Ship.ToString();
@@ -572,15 +581,15 @@ namespace statki
                                 int index1 = areaY * 10 + areaX + 100;
                                 int index2 = (areaY - 1) * 10 + areaX + 100;
                                 int index3 = (areaY - 2) * 10 + areaX + 100;
-                                int index4 = (areaY - 3) * 10 + areaX +100;
+                                int index4 = (areaY - 3) * 10 + areaX + 100;
                                 Button buttonToChange1 = (Button)this.Controls[index1];
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
                                 Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                buttonToChange4.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
+                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY - 1] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY - 2] = Condition.Ship.ToString();
@@ -597,10 +606,10 @@ namespace statki
                                 Button buttonToChange2 = (Button)this.Controls[index2];
                                 Button buttonToChange3 = (Button)this.Controls[index3];
                                 Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Red;
-                                buttonToChange2.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
-                                buttonToChange3.BackColor = System.Drawing.Color.Red;
+                                buttonToChange1.BackColor = System.Drawing.Color.Green;
+                                buttonToChange2.BackColor = System.Drawing.Color.Green;
+                                buttonToChange3.BackColor = System.Drawing.Color.Green;
+                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasPlayer[areaX, areaY] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY + 1] = Condition.Ship.ToString();
                                 areasPlayer[areaX, areaY + 2] = Condition.Ship.ToString();
@@ -610,7 +619,6 @@ namespace statki
                     }
                 }
             }
-
         }
      
         void CreateBotButtons()
@@ -633,6 +641,7 @@ namespace statki
                 btn.Left = col * (buttonSize) + marginX;
                 btn.Top = row * (buttonSize) + marginY;
                 btn.Text = "";
+                btn.Tag = i;
                 btn.Click += Button_Click;
                 this.Controls.Add(btn);
             }
@@ -646,29 +655,58 @@ namespace statki
             int labelPositionX = buttonsPerRow * buttonSize + marginX;
             int labelPositionY = marginY / 2;
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 100; i < 200; i++)
             {
                 Button btn = new Button();
                 btn.Width = buttonSize;
                 btn.Height = buttonSize;
                 btn.BackColor = System.Drawing.Color.LightBlue;
-                int row = i / buttonsPerRow;
-                int col = i % buttonsPerRow;
+                int row = (i - 100) / buttonsPerRow;
+                int col = (i - 100) % buttonsPerRow;
                 btn.Left = col * (buttonSize) + marginX;
                 btn.Top = row * (buttonSize) + marginY;
                 btn.Text = "";
-                //btn.Click += Button_Click;
+                btn.Tag = i;
+                btn.Click += Button_Click;
                 this.Controls.Add(btn);
             }
         }
-        void GenerateLabels()
-        {
 
+        private void Btn_Click(object? sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
         void Button_Click(object sender, EventArgs e)
         {
+            int positionX, positionY;
             Button clickedButton = (Button)sender;
-            MessageBox.Show($"Klikniêto przycisk {clickedButton.Text}");
+            
+            if((int)clickedButton.Tag < 100)
+            {
+                positionX = (int)clickedButton.Tag % 10;
+                positionY = ((int)clickedButton.Tag - positionX) / 10;
+                
+                if (areasBot[positionX, positionY] == Condition.Ship.ToString())
+                {
+                    clickedButton.BackColor = Color.Orange;
+                }
+            }
+            else
+            {
+                positionX = ((int)clickedButton.Tag - 100) % 10;
+                positionY = (((int)clickedButton.Tag - 100) - positionX) / 10;
+                //potem usunac
+                if (areasPlayer[positionX, positionY] == Condition.Ship.ToString())
+                {
+                    clickedButton.BackColor = Color.Orange;
+                }
+            }
+            MessageBox.Show($"Klikniêto przycisk o indeksie {clickedButton.Tag}");
+        }                      
+                
+        void GenerateLabels()
+        {
+
         }
         void Setup()
         {
@@ -688,6 +726,7 @@ namespace statki
                 if (x > 0 && y < 9) isSafe &= areas[x - 1, y + 1] == "Empty"; 
                 if (x < 9 && y > 0) isSafe &= areas[x + 1, y - 1] == "Empty"; 
                 if (x < 9 && y < 9) isSafe &= areas[x + 1, y + 1] == "Empty"; 
+                
 
                 return isSafe;
             }
