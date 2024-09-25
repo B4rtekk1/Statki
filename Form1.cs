@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 
 /*Sprawdzanie czy moze byc dwojka, trojka, czworka - generowanie statkow bota
  * losowe generownaie statkow gracza lub mozliwosc wyboru polozenia
@@ -33,11 +34,7 @@ namespace statki
             CreateBotButtons();
             PlayerButtons();
             GenerateBotShips();
-            GeneratePlayerShips();
-            GenerateLabels();
-            //CreateBotButtons();
-            
-            
+            GeneratePlayerShips(); 
         }
           
         void TableImplementation()
@@ -598,7 +595,7 @@ namespace statki
                             else if (CanPlaceShip1(areaX, areaY + 3, areasPlayer))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
+                                int index1 = areaY * 10 + areaX + 100;
                                 int index2 = (areaY + 1) * 10 + areaX + 100;
                                 int index3 = (areaY + 2) * 10 + areaX + 100;
                                 int index4 = (areaY + 3) * 10 + areaX + 100;
@@ -680,55 +677,96 @@ namespace statki
         {
             int positionX, positionY;
             Button clickedButton = (Button)sender;
-            
-            if((int)clickedButton.Tag < 100)
+
+            if (clickedButton.Tag is int tagValue1 && tagValue1 < 100)
             {
-                positionX = (int)clickedButton.Tag % 10;
-                positionY = ((int)clickedButton.Tag - positionX) / 10;
-                
+                positionX = tagValue1 % 10;
+                positionY = (tagValue1 - positionX) / 10;
+
                 if (areasBot[positionX, positionY] == Condition.Ship.ToString())
                 {
-                    if(ShipSunk(positionX, positionY))
+                    if (ShipSunk(positionX, positionY))
                     {
-                        clickedButton.BackColor = Color.Red;
+                        clickedButton.BackColor = Color.Red;  // Zatopiony statek
                     }
                     else
                     {
-                        clickedButton.BackColor = Color.Orange;
+                        clickedButton.BackColor = Color.Orange;  // Trafiony statek
                     }
-                    
                 }
-                if (areasBot[positionX, positionY] == Condition.Empty.ToString())
+                else if (areasBot[positionX, positionY] == Condition.Empty.ToString())
                 {
-                    clickedButton.BackColor= Color.Gray;
+                    clickedButton.BackColor = Color.Gray;  // Pusty
                 }
             }
+            if(clickedButton.Tag is int tagValue2 && tagValue2 >=100 && tagValue2 < 200)
+            {
+                positionX = (tagValue2 - 100) % 10;
+                positionY = (tagValue2 - positionX - 100) / 10;
+
+                if (areasPlayer[positionX, positionY] == Condition.Ship.ToString())
+                {
+                    if (ShipSunk(positionX, positionY))
+                    {
+                        clickedButton.BackColor = Color.Red;  // Zatopiony statek
+                    }
+                    else
+                    {
+                        clickedButton.BackColor = Color.Orange;  // Trafiony statek                        
+                    }
+                }
+                else if (areasPlayer[positionX, positionY] == Condition.Empty.ToString())
+                {
+                    clickedButton.BackColor = Color.Gray;  // Pusty
+                }
+            }
+            
+
             MessageBox.Show($"Klikniêto przycisk o indeksie {clickedButton.Tag}");
         }                     
         bool ShipSunk(int x, int y)
         {
             if (x >= 0 && x < 10 && y >= 0 && y < 10)
             {
-                bool sunk = true;
 
-                if (x > 0) sunk &= areasBot[x - 1, y] == Condition.Ship.ToString();
-                if (x < 9) sunk &= areasBot[x + 1, y] == Condition.Ship.ToString();
-                if (y > 0) sunk &= areasBot[x, y - 1] == Condition.Ship.ToString();
-                if (y < 9) sunk &= areasBot[x, y + 1] == Condition.Ship.ToString();
-                return sunk;
+                bool sunk = true;
+                if (x > 0)
+                {
+                    sunk = areasBot[x - 1, y] == Condition.Ship.ToString();
+                    areasBot[x - 1, y] = Condition.Hit.ToString();
+                }
+                else if (x < 9) sunk = areasBot[x + 1, y] == Condition.Ship.ToString();
+                else if (y > 0) sunk = areasBot[x, y - 1] == Condition.Ship.ToString();
+                else if (y < 9) sunk = areasBot[x, y + 1] == Condition.Ship.ToString();
+                else if (x > 0 && y > 0) sunk = areasBot[x - 1, y - 1] == Condition.Ship.ToString();
+                else if (x > 0 && y < 9) sunk = areasBot[x - 1, y + 1] == Condition.Ship.ToString();
+                else if (x < 9 && y > 0) sunk = areasBot[x + 1, y - 1] == Condition.Ship.ToString();
+                else if (x < 9 && y < 9) sunk = areasBot[x + 1, y + 1] == Condition.Ship.ToString();
+
+                CheckSunkShip(x, y);
+                return !sunk;
             }
 
-            return true; 
+            return false; 
         }
+        void CheckSunkShip(int x, int y)
+        {
+            bool allShipSunk = false;
+            if (x > 0)
+            {
+                allShipSunk = areasBot[x - 1, y] != Condition.Ship.ToString();
                 
-        void GenerateLabels()
-        {
+            }
+            else if (x < 9) allShipSunk = areasBot[x + 1, y] != Condition.Ship.ToString();
+            else if (y > 0) allShipSunk = areasBot[x, y - 1] != Condition.Ship.ToString();
+            else if (y < 9) allShipSunk = areasBot[x, y + 1] != Condition.Ship.ToString();
+            else if (x > 0 && y > 0) allShipSunk = areasBot[x - 1, y - 1] != Condition.Ship.ToString();
+            else if (x > 0 && y < 9) allShipSunk = areasBot[x - 1, y + 1] != Condition.Ship.ToString();
+            else if (x < 9 && y > 0) allShipSunk = areasBot[x + 1, y - 1] != Condition.Ship.ToString();
+            else if (x < 9 && y < 9) allShipSunk = areasBot[x + 1, y + 1] != Condition.Ship.ToString();
 
         }
-        void Setup()
-        {
-
-        }
+        
         bool CanPlaceShip1(int x, int y, string[,] areas)
         {
             if (x >= 0 && x < 10 && y >= 0 && y < 10)
