@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Media;
 
 /*Sprawdzanie czy moze byc dwojka, trojka, czworka - generowanie statkow bota
  * losowe generownaie statkow gracza lub mozliwosc wyboru polozenia
@@ -12,6 +13,7 @@ namespace statki
     public partial class Form1 : Form
     {
         string[,] areasBot = new string[10, 10];
+        string move = "Player";
         string[,] areasPlayer = new string[10, 10];
         int areaX, areaY, direction;
         bool placed;
@@ -650,24 +652,58 @@ namespace statki
             int positionX, positionY;
             Button clickedButton = (Button)sender;
 
-            if (clickedButton.Tag is int tagValue1 && tagValue1 < 100)
+            if (move == "Player" && clickedButton.Tag is int tagValue1 && tagValue1 < 100)
             {
                 positionX = tagValue1 % 10;
                 positionY = (tagValue1 - positionX) / 10;
                 if (areasBot[positionX, positionY] == Condition.Empty.ToString())
                 {
                     areasBot[positionX, positionY] = Condition.Blocked.ToString();
+                    move = "Bot";
+                    BotMove(true);
                 }
                 if (areasBot[positionX, positionY] == Condition.Ship.ToString())
                 {
                     areasBot[positionX, positionY] = Condition.Hit.ToString();
-                    ShipSunk(positionX, positionY);
+                    ShipSunkBot(positionX, positionY);
                 }
                 AreasColors();
 
             }
         }
-        void ShipSunk(int x, int y)
+        void BotMove(bool sleep)
+        {
+            if(sleep)
+            {
+                //Thread.Sleep(750);
+            }
+            if(move == "Bot")
+            {
+                Random X = new Random();
+                Random Y = new Random();
+                int x = X.Next(0, 10);
+                int y = Y.Next(0, 10);
+                if (areasPlayer[x, y] == Condition.Empty.ToString())
+                {
+                    areasPlayer[x, y] = Condition.Blocked.ToString();
+                    move = "Player";
+                }
+                else if (areasPlayer[x, y] == Condition.Ship.ToString())
+                {
+                    areasPlayer[x, y] = Condition.Hit.ToString();
+                    ShipSunkPlayer(x, y);
+                    BotMove(true);
+                }
+                else if (areasPlayer[x, y] == Condition.Blocked.ToString() || areasPlayer[x, y] == Condition.Hit.ToString())
+                {
+                    BotMove(false);
+                }
+                
+            }
+            AreasColors();
+
+        }
+        void ShipSunkBot(int x, int y)
         {
             if (x >= 0 && x < 10 && y >= 0 && y < 10)
             {
@@ -705,11 +741,60 @@ namespace statki
                 if (sunk == false) //zatopiony, jedynka
                 {
                     areasBot[x, y] = Condition.Sunk.ToString();
-                    BlockAreas(x,y);
+                    BlockAreasBot(x,y);
                 }
                 else
                 {
-                    CheckSunkShipElements(x, y);
+                    CheckSunkShipElementsBot(x, y);
+                }
+
+            }
+
+
+        }
+        void ShipSunkPlayer(int x, int y)
+        {
+            if (x >= 0 && x < 10 && y >= 0 && y < 10)
+            {
+
+                bool sunk = false; //false oznacza ze jest zatopiony
+
+                if (x > 0)
+                {
+                    if (areasPlayer[x - 1, y] == Condition.Ship.ToString() || areasPlayer[x - 1, y] == Condition.Hit.ToString())
+                    {
+                        sunk = true;
+                    }
+                }
+                if (x < 9 && sunk == false)
+                {
+                    if (areasPlayer[x + 1, y] == Condition.Ship.ToString() || areasPlayer[x + 1, y] == Condition.Hit.ToString())
+                    {
+                        sunk = true;
+                    }
+                }
+                if (y > 0 && sunk == false)
+                {
+                    if (areasPlayer[x, y - 1] == Condition.Ship.ToString() || areasPlayer[x, y - 1] == Condition.Hit.ToString())
+                    {
+                        sunk = true;
+                    }
+                }
+                if (y < 9 && sunk == false)
+                {
+                    if (areasPlayer[x, y + 1] == Condition.Ship.ToString() || areasPlayer[x, y + 1] == Condition.Hit.ToString())
+                    {
+                        sunk = true;
+                    }
+                }
+                if (sunk == false) //zatopiony, jedynka
+                {
+                    areasPlayer[x, y] = Condition.Sunk.ToString();
+                    BlockAreasPlayer(x, y);
+                }
+                else
+                {
+                    CheckSunkShipElementsPlayer(x, y);
                 }
 
             }
@@ -717,7 +802,7 @@ namespace statki
 
         }
         //musze pomyslec
-        void CheckSunkShipElements(int x, int y)
+        void CheckSunkShipElementsBot(int x, int y)
         {
             int loops1 = 0;
             int loops2 = 0;
@@ -769,12 +854,12 @@ namespace statki
                 for (int i = 0; i < loops1; i++)
                 {
                     areasBot[x - i, y] = Condition.Sunk.ToString();
-                    BlockAreas(x - i, y);
+                    BlockAreasBot(x - i, y);
                 }
                 for (int i = 0; i < loops2; i++)
                 {
                     areasBot[x + i, y] = Condition.Sunk.ToString();
-                    BlockAreas(x + i, y);
+                    BlockAreasBot(x + i, y);
                 }
             }
             loops1 = 0;
@@ -826,16 +911,134 @@ namespace statki
                 for (int i = 0; i < loops1; i++)
                 {
                     areasBot[x, y - i] = Condition.Sunk.ToString();
-                    BlockAreas(x, y - i);
+                    BlockAreasBot(x, y - i);
                 }
                 for (int i = 0; i < loops2; i++)
                 {
                     areasBot[x, y + i] = Condition.Sunk.ToString();
-                    BlockAreas(x, y + i);
+                    BlockAreasBot(x, y + i);
                 }
             }
         }
-        void BlockAreas(int x, int y)
+        void CheckSunkShipElementsPlayer(int x, int y)
+        {
+            int loops1 = 0;
+            int loops2 = 0;
+            bool isSunk = false;
+
+
+            if (x > 0 && (areasPlayer[x - 1, y] == Condition.Ship.ToString() || areasPlayer[x - 1, y] == Condition.Hit.ToString()))
+            {
+                for (int i = x; i > x - 4; i--)
+                {
+                    if (i < 0)
+                    {
+                        break;
+                    }
+                    if (areasPlayer[i, y] == Condition.Hit.ToString())
+                    {
+                        loops1++;
+                        isSunk = true;
+                    }
+                    if (areasPlayer[i, y] == Condition.Ship.ToString())
+                    {
+                        isSunk = false;
+                        break;
+                    }
+                }
+            }
+            if (x < 9 && (areasPlayer[x + 1, y] == Condition.Ship.ToString() || areasPlayer[x + 1, y] == Condition.Hit.ToString()))
+            {
+                for (int i = x; i < x + 4; i++)
+                {
+                    if (i > 9)
+                    {
+                        break;
+                    }
+                    if (areasPlayer[i, y] == Condition.Hit.ToString())
+                    {
+                        loops2++;
+                        isSunk = true;
+                    }
+                    if (areasPlayer[i, y] == Condition.Ship.ToString())
+                    {
+                        isSunk = false;
+                        break;
+                    }
+                }
+            }
+            if (isSunk)
+            {
+                for (int i = 0; i < loops1; i++)
+                {
+                    areasPlayer[x - i, y] = Condition.Sunk.ToString();
+                    BlockAreasPlayer(x - i, y);
+                }
+                for (int i = 0; i < loops2; i++)
+                {
+                    areasPlayer[x + i, y] = Condition.Sunk.ToString();
+                    BlockAreasPlayer(x + i, y);
+                }
+            }
+            loops1 = 0;
+            loops2 = 0;
+            isSunk = false;
+            if (y > 0 && (areasPlayer[x, y - 1] == Condition.Ship.ToString() || areasPlayer[x, y - 1] == Condition.Hit.ToString()))
+            {
+                for (int i = y; i > y - 4; i--)
+                {
+                    if (i < 0)
+                    {
+                        break;
+                    }
+                    if (areasPlayer[x, i] == Condition.Hit.ToString())
+                    {
+                        loops1++;
+                        isSunk = true;
+                    }
+                    if (areasPlayer[x, i] == Condition.Ship.ToString())
+                    {
+                        isSunk = false;
+                        break;
+                    }
+                }
+            }
+            if (y < 9 && (areasPlayer[x, y + 1] == Condition.Ship.ToString() || areasPlayer[x, y + 1] == Condition.Hit.ToString()))
+            {
+                for (int i = y; i < y + 4; i++)
+                {
+                    if (i > 9)
+                    {
+                        break;
+                    }
+                    if (areasPlayer[x, i] == Condition.Hit.ToString())
+                    {
+                        loops2++;
+                        isSunk = true;
+                    }
+                    if (areasPlayer[x, i] == Condition.Ship.ToString())
+                    {
+                        isSunk = false;
+                        break;
+                    }
+                }
+            }
+            if (isSunk)
+            {
+
+                for (int i = 0; i < loops1; i++)
+                {
+                    areasPlayer[x, y - i] = Condition.Sunk.ToString();
+                    BlockAreasPlayer(x, y - i);
+                }
+                for (int i = 0; i < loops2; i++)
+                {
+                    areasPlayer[x, y + i] = Condition.Sunk.ToString();
+                    BlockAreasPlayer(x, y + i);
+                }
+            }
+        }
+        void BlockAreasBot(int x, int y)
         {
             if (x < 9 && areasBot[x + 1, y] == Condition.Empty.ToString())
             {
@@ -871,6 +1074,42 @@ namespace statki
                 areasBot[x - 1, y - 1] = Condition.Blocked.ToString();
             }
         }
+        void BlockAreasPlayer(int x, int y)
+        {
+            if (x < 9 && areasPlayer[x + 1, y] == Condition.Empty.ToString())
+            {
+                areasPlayer[x + 1, y] = Condition.Blocked.ToString();
+            }
+            if (x > 0 && areasPlayer[x - 1, y] == Condition.Empty.ToString())
+            {
+                areasPlayer[x - 1, y] = Condition.Blocked.ToString();
+            }
+            if (y < 9 && areasPlayer[x, y + 1] == Condition.Empty.ToString())
+            {
+                areasPlayer[x, y + 1] = Condition.Blocked.ToString();
+            }
+            if (y > 0 && areasPlayer[x, y - 1] == Condition.Empty.ToString())
+            {
+                areasPlayer[x, y - 1] = Condition.Blocked.ToString();
+            }
+
+            if (x < 9 && y < 9 && areasPlayer[x + 1, y + 1] == Condition.Empty.ToString())
+            {
+                areasPlayer[x + 1, y + 1] = Condition.Blocked.ToString();
+            }
+            if (x > 0 && y < 9 && areasPlayer[x - 1, y + 1] == Condition.Empty.ToString())
+            {
+                areasPlayer[x - 1, y + 1] = Condition.Blocked.ToString();
+            }
+            if (x < 9 && y > 0 && areasPlayer[x + 1, y - 1] == Condition.Empty.ToString())
+            {
+                areasPlayer[x + 1, y - 1] = Condition.Blocked.ToString();
+            }
+            if (x > 0 && y > 0 && areasPlayer[x - 1, y - 1] == Condition.Empty.ToString())
+            {
+                areasPlayer[x - 1, y - 1] = Condition.Blocked.ToString();
+            }
+        }
         void AreasColors()
         {
             for (int x = 0; x < 10; x++)
@@ -899,10 +1138,58 @@ namespace statki
 
                 }
             }
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    int position = y * 10 + x;
+                    Button btn = (Button)this.Controls[position + 100];
+                    if (areasPlayer[x, y] == Condition.Hit.ToString())
+                    {
+                        btn.BackColor = Color.Yellow;
+                    }
+                    if (areasPlayer[x, y] == Condition.Sunk.ToString())
+                    {
+                        btn.BackColor = Color.Red;
+                    }
+                    if (areasPlayer[x, y] == Condition.Empty.ToString())
+                    {
+                        btn.BackColor = Color.LightBlue;
+                    }
+                    if (areasPlayer[x, y] == Condition.Blocked.ToString())
+                    {
+                        btn.BackColor = Color.Gray;
+                    }
+                    if (areasPlayer[x, y] == Condition.Ship.ToString())
+                    {
+                        btn.BackColor = Color.Green;
+                    }
+
+                }
+            }
+            if(CheckWin())
+            {
+                move = "Koniec";
+            }
+            
         }
-
-
-        bool CanPlaceShip1(int x, int y, string[,] areas)
+        bool CheckWin()
+        {
+            bool Win = true;
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    if (areasBot[x, y] == Condition.Ship.ToString())
+                    {
+                        Win = false;
+                        break;
+                    }
+                }
+            }
+            return Win;
+        }
+        private bool CanPlaceShip1(int x, int y, string[,] areas)
         {
             if (x >= 0 && x < 10 && y >= 0 && y < 10)
             {
