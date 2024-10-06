@@ -1,6 +1,6 @@
 ﻿namespace statki
 {
-    partial class Form1
+    partial class Statki
     {
         /// <summary>
         ///  Required designer variable.

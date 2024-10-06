@@ -4,18 +4,17 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Media;
 
-/*Sprawdzanie czy moze byc dwojka, trojka, czworka - generowanie statkow bota
- * losowe generownaie statkow gracza lub mozliwosc wyboru polozenia
- */
 
 namespace statki
 {
-    public partial class Form1 : Form
+    public partial class Statki : Form
     {
         string[,] areasBot = new string[10, 10];
         string move = "Player";
+        string winner;
         string[,] areasPlayer = new string[10, 10];
-        int areaX, areaY, direction;
+        List<int> availbleAreana = new List<int>();
+        int areaX, areaY, direction, lastHited1, lastHited2;
         bool placed;
         Random shipPosition = new Random();
         Random shipDirection = new Random();
@@ -29,18 +28,43 @@ namespace statki
         Ship ship2Player = new Ship();
         Ship ship3Player = new Ship();
         Ship ship4Player = new Ship();
-        public Form1()
+        public Statki()
         {
+            lastHited1 = -1;
             InitializeComponent();
+            Setup();
             TableImplementation();
             CreateBotButtons();
             PlayerButtons();
             GenerateBotShips();
             GeneratePlayerShips();
+            GenerateLabels();
+            
         }
 
+        void GenerateLabels()
+        { 
+            Label lblPlayer = new Label();
+            lblPlayer.Left = 150;
+            lblPlayer.Top = 20;
+            lblPlayer.Text = "Gracz";
+            this.Controls.Add(lblPlayer);
+            Label lblBot = new Label();
+            lblBot.Left = 520;
+            lblBot.Top = 20;
+            lblBot.Text = "Bot";
+            this.Controls.Add(lblBot);
+        }
+        void Setup()
+        {
+            this.Text = "Statki";
+            this.Size = new System.Drawing.Size(740, 420);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+        }
         void TableImplementation()
         {
+            int arena;
             for (int x = 0; x < 10; x++)
             {
                 for (int y = 0; y < 10; y++)
@@ -48,11 +72,13 @@ namespace statki
                     areasBot[x, y] = Condition.Empty.ToString();
                 }
             }
-            for (int x = 0; x < 10; x++)
+            for (int y = 0; y < 10; y++)
             {
-                for (int y = 0; y < 10; y++)
+                for (int x = 0; x < 10; x++)
                 {
                     areasPlayer[x, y] = Condition.Empty.ToString();
+                    arena = y * 10 + x;
+                    availbleAreana.Add(arena);
                 }
             }
         }
@@ -75,18 +101,6 @@ namespace statki
                             if (CanPlaceShip1(areaX - 3, areaY, areasBot))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
-                                int index2 = areaY * 10 + areaX - 1;
-                                int index3 = areaY * 10 + areaX - 2;
-                                int index4 = areaY * 10 + areaX - 3;
-                                Button buttonToChange1 = (Button)this.Controls[index1];
-                                Button buttonToChange2 = (Button)this.Controls[index2];
-                                Button buttonToChange3 = (Button)this.Controls[index3];
-                                Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Green;
-                                buttonToChange2.BackColor = System.Drawing.Color.Green;
-                                buttonToChange3.BackColor = System.Drawing.Color.Green;
-                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 1, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 2, areaY] = Condition.Ship.ToString();
@@ -95,18 +109,6 @@ namespace statki
                             else if (CanPlaceShip1(areaX + 3, areaY, areasBot))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
-                                int index2 = areaY * 10 + areaX + 1;
-                                int index3 = areaY * 10 + areaX + 2;
-                                int index4 = areaY * 10 + areaX + 3;
-                                Button buttonToChange1 = (Button)this.Controls[index1];
-                                Button buttonToChange2 = (Button)this.Controls[index2];
-                                Button buttonToChange3 = (Button)this.Controls[index3];
-                                Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Green;
-                                buttonToChange2.BackColor = System.Drawing.Color.Green;
-                                buttonToChange3.BackColor = System.Drawing.Color.Green;
-                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 1, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 2, areaY] = Condition.Ship.ToString();
@@ -118,18 +120,6 @@ namespace statki
                             if (CanPlaceShip1(areaX, areaY - 3, areasBot))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
-                                int index2 = (areaY - 1) * 10 + areaX;
-                                int index3 = (areaY - 2) * 10 + areaX;
-                                int index4 = (areaY - 3) * 10 + areaX;
-                                Button buttonToChange1 = (Button)this.Controls[index1];
-                                Button buttonToChange2 = (Button)this.Controls[index2];
-                                Button buttonToChange3 = (Button)this.Controls[index3];
-                                Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Green;
-                                buttonToChange2.BackColor = System.Drawing.Color.Green;
-                                buttonToChange3.BackColor = System.Drawing.Color.Green;
-                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 1] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 2] = Condition.Ship.ToString();
@@ -138,18 +128,6 @@ namespace statki
                             else if (CanPlaceShip1(areaX, areaY + 3, areasBot))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
-                                int index2 = (areaY + 1) * 10 + areaX;
-                                int index3 = (areaY + 2) * 10 + areaX;
-                                int index4 = (areaY + 3) * 10 + areaX;
-                                Button buttonToChange1 = (Button)this.Controls[index1];
-                                Button buttonToChange2 = (Button)this.Controls[index2];
-                                Button buttonToChange3 = (Button)this.Controls[index3];
-                                Button buttonToChange4 = (Button)this.Controls[index4];
-                                buttonToChange1.BackColor = System.Drawing.Color.Green;
-                                buttonToChange2.BackColor = System.Drawing.Color.Green;
-                                buttonToChange3.BackColor = System.Drawing.Color.Green;
-                                buttonToChange4.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 1] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 2] = Condition.Ship.ToString();
@@ -175,15 +153,6 @@ namespace statki
                             if (CanPlaceShip1(areaX - 2, areaY, areasBot))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
-                                int index2 = areaY * 10 + areaX - 1;
-                                int index3 = areaY * 10 + areaX - 2;
-                                Button buttonToChange1 = (Button)this.Controls[index1];
-                                Button buttonToChange2 = (Button)this.Controls[index2];
-                                Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Green;
-                                buttonToChange2.BackColor = System.Drawing.Color.Green;
-                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 1, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX - 2, areaY] = Condition.Ship.ToString();
@@ -191,15 +160,6 @@ namespace statki
                             else if (CanPlaceShip1(areaX + 2, areaY, areasBot))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
-                                int index2 = areaY * 10 + areaX + 1;
-                                int index3 = areaY * 10 + areaX + 2;
-                                Button buttonToChange1 = (Button)this.Controls[index1];
-                                Button buttonToChange2 = (Button)this.Controls[index2];
-                                Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Green;
-                                buttonToChange2.BackColor = System.Drawing.Color.Green;
-                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 1, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX + 2, areaY] = Condition.Ship.ToString();
@@ -210,15 +170,6 @@ namespace statki
                             if (CanPlaceShip1(areaX, areaY - 2, areasBot))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
-                                int index2 = (areaY - 1) * 10 + areaX;
-                                int index3 = (areaY - 2) * 10 + areaX;
-                                Button buttonToChange1 = (Button)this.Controls[index1];
-                                Button buttonToChange2 = (Button)this.Controls[index2];
-                                Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Green;
-                                buttonToChange2.BackColor = System.Drawing.Color.Green;
-                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 1] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY - 2] = Condition.Ship.ToString();
@@ -226,15 +177,6 @@ namespace statki
                             else if (CanPlaceShip1(areaX, areaY + 2, areasBot))
                             {
                                 placed = true;
-                                int index1 = areaY * 10 + areaX;
-                                int index2 = (areaY + 1) * 10 + areaX;
-                                int index3 = (areaY + 2) * 10 + areaX;
-                                Button buttonToChange1 = (Button)this.Controls[index1];
-                                Button buttonToChange2 = (Button)this.Controls[index2];
-                                Button buttonToChange3 = (Button)this.Controls[index3];
-                                buttonToChange1.BackColor = System.Drawing.Color.Green;
-                                buttonToChange2.BackColor = System.Drawing.Color.Green;
-                                buttonToChange3.BackColor = System.Drawing.Color.Green;
                                 areasBot[areaX, areaY] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 1] = Condition.Ship.ToString();
                                 areasBot[areaX, areaY + 2] = Condition.Ship.ToString();
@@ -637,7 +579,7 @@ namespace statki
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.FlatAppearance.BorderColor = Color.LightGray;
                 btn.FlatAppearance.BorderSize = 1;
-                btn.FlatAppearance.MouseOverBackColor = Color.DarkBlue;
+                //btn.FlatAppearance.MouseOverBackColor = null;
                 int row = (i - 100) / buttonsPerRow;
                 int col = (i - 100) % buttonsPerRow;
                 btn.Left = col * (buttonSize) + marginX;
@@ -660,7 +602,7 @@ namespace statki
                 {
                     areasBot[positionX, positionY] = Condition.Blocked.ToString();
                     move = "Bot";
-                    BotMove(true);
+                    BotMove();
                 }
                 if (areasBot[positionX, positionY] == Condition.Ship.ToString())
                 {
@@ -671,38 +613,103 @@ namespace statki
 
             }
         }
-        void BotMove(bool sleep)
-        {
-            if(sleep)
-            {
-                //Thread.Sleep(750);
-            }
-            if(move == "Bot")
-            {
-                Random X = new Random();
-                Random Y = new Random();
-                int x = X.Next(0, 10);
-                int y = Y.Next(0, 10);
-                if (areasPlayer[x, y] == Condition.Empty.ToString())
-                {
-                    areasPlayer[x, y] = Condition.Blocked.ToString();
-                    move = "Player";
-                }
-                else if (areasPlayer[x, y] == Condition.Ship.ToString())
-                {
-                    areasPlayer[x, y] = Condition.Hit.ToString();
-                    ShipSunkPlayer(x, y);
-                    BotMove(true);
-                }
-                else if (areasPlayer[x, y] == Condition.Blocked.ToString() || areasPlayer[x, y] == Condition.Hit.ToString())
-                {
-                    BotMove(false);
-                }
-                
-            }
-            AreasColors();
 
+
+        async void BotMove()
+        {
+            int newIndex, randomIndex;
+            bool available = false;
+            int index = 0, x = 0, y = 0;
+            await Task.Delay(500);
+
+            if (lastHited1 != -1)
+            {
+                for (int i = -1; i < 2; i++)
+                {
+                    newIndex = lastHited1 + i;
+                    available = availbleAreana.Contains(newIndex);
+                    if (available)
+                    {
+                        index = newIndex;
+                        x = index % 10;
+                        y = (index - x) / 10;
+                        break;
+                    }
+                }
+
+
+                for (int i = -1; i < 2; i++)
+                {
+                    newIndex = lastHited2 + i;
+                    available = availbleAreana.Contains(newIndex);
+                    if (available)
+                    {
+                        index = newIndex;
+                        x = index % 10;
+                        y = (index - x) / 10;
+                        break;
+                    }
+                }
+
+                if (!available)
+                {
+
+                    for (int i = -1; i < 2; i++)
+                    {
+                        newIndex = lastHited1 + (i * 10);
+                        available = availbleAreana.Contains(newIndex);
+                        if (available)
+                        {
+                            index = newIndex;
+                            x = index % 10;
+                            y = (index - x) / 10;
+                            break;
+                        }
+                    }
+                    for (int i = -1; i < 2; i++)
+                    {
+                        newIndex = lastHited2 + (i * 10);
+                        available = availbleAreana.Contains(newIndex);
+                        if (available)
+                        {
+                            index = newIndex;
+                            x = index % 10;
+                            y = (index - x) / 10;
+                            break;
+                        }
+                    }
+
+                }
+            }
+            if (!available)
+            {
+                Random random = new Random();
+                randomIndex = random.Next(0, availbleAreana.Count);
+                index = availbleAreana[randomIndex];
+                x = index % 10;
+                y = (index - x) / 10;
+            }
+
+            if (areasPlayer[x, y] == Condition.Empty.ToString())
+            {
+                areasPlayer[x, y] = Condition.Blocked.ToString();
+                availbleAreana.Remove(index);
+                move = "Player";
+            }
+            else if (areasPlayer[x, y] == Condition.Ship.ToString())
+            {
+                areasPlayer[x, y] = Condition.Hit.ToString();
+                lastHited2 = lastHited1;
+                lastHited1 = index;
+                ShipSunkPlayer(x, y);
+                availbleAreana.Remove(index);
+                BotMove();
+            }
+
+
+            AreasColors();
         }
+
         void ShipSunkBot(int x, int y)
         {
             if (x >= 0 && x < 10 && y >= 0 && y < 10)
@@ -741,7 +748,8 @@ namespace statki
                 if (sunk == false) //zatopiony, jedynka
                 {
                     areasBot[x, y] = Condition.Sunk.ToString();
-                    BlockAreasBot(x,y);
+                    BlockAreasBot(x, y);
+
                 }
                 else
                 {
@@ -791,6 +799,8 @@ namespace statki
                 {
                     areasPlayer[x, y] = Condition.Sunk.ToString();
                     BlockAreasPlayer(x, y);
+                    lastHited1 = -1;
+
                 }
                 else
                 {
@@ -851,6 +861,7 @@ namespace statki
             }
             if (isSunk)
             {
+
                 for (int i = 0; i < loops1; i++)
                 {
                     areasBot[x - i, y] = Condition.Sunk.ToString();
@@ -969,6 +980,7 @@ namespace statki
             }
             if (isSunk)
             {
+                lastHited1 = -1;
                 for (int i = 0; i < loops1; i++)
                 {
                     areasPlayer[x - i, y] = Condition.Sunk.ToString();
@@ -1025,16 +1037,18 @@ namespace statki
             }
             if (isSunk)
             {
-
+                lastHited1 = -1;
                 for (int i = 0; i < loops1; i++)
                 {
                     areasPlayer[x, y - i] = Condition.Sunk.ToString();
                     BlockAreasPlayer(x, y - i);
+
                 }
                 for (int i = 0; i < loops2; i++)
                 {
                     areasPlayer[x, y + i] = Condition.Sunk.ToString();
                     BlockAreasPlayer(x, y + i);
+
                 }
             }
         }
@@ -1065,7 +1079,7 @@ namespace statki
             {
                 areasBot[x - 1, y + 1] = Condition.Blocked.ToString();
             }
-            if (x <  9 && y > 0 && areasBot[x + 1, y - 1] == Condition.Empty.ToString())
+            if (x < 9 && y > 0 && areasBot[x + 1, y - 1] == Condition.Empty.ToString())
             {
                 areasBot[x + 1, y - 1] = Condition.Blocked.ToString();
             }
@@ -1079,35 +1093,43 @@ namespace statki
             if (x < 9 && areasPlayer[x + 1, y] == Condition.Empty.ToString())
             {
                 areasPlayer[x + 1, y] = Condition.Blocked.ToString();
+                availbleAreana.Remove(y * 10 + x + 1);
             }
             if (x > 0 && areasPlayer[x - 1, y] == Condition.Empty.ToString())
             {
                 areasPlayer[x - 1, y] = Condition.Blocked.ToString();
+                availbleAreana.Remove(y * 10 + x - 1);
             }
             if (y < 9 && areasPlayer[x, y + 1] == Condition.Empty.ToString())
             {
                 areasPlayer[x, y + 1] = Condition.Blocked.ToString();
+                availbleAreana.Remove((y + 1) * 10 + x);
             }
             if (y > 0 && areasPlayer[x, y - 1] == Condition.Empty.ToString())
             {
                 areasPlayer[x, y - 1] = Condition.Blocked.ToString();
+                availbleAreana.Remove((y - 1) * 10 + x);
             }
 
             if (x < 9 && y < 9 && areasPlayer[x + 1, y + 1] == Condition.Empty.ToString())
             {
                 areasPlayer[x + 1, y + 1] = Condition.Blocked.ToString();
+                availbleAreana.Remove((y + 1) * 10 + x + 1);
             }
             if (x > 0 && y < 9 && areasPlayer[x - 1, y + 1] == Condition.Empty.ToString())
             {
                 areasPlayer[x - 1, y + 1] = Condition.Blocked.ToString();
+                availbleAreana.Remove((y + 1) * 10 + x - 1);
             }
             if (x < 9 && y > 0 && areasPlayer[x + 1, y - 1] == Condition.Empty.ToString())
             {
                 areasPlayer[x + 1, y - 1] = Condition.Blocked.ToString();
+                availbleAreana.Remove((y - 1) * 10 + x + 1);
             }
             if (x > 0 && y > 0 && areasPlayer[x - 1, y - 1] == Condition.Empty.ToString())
             {
                 areasPlayer[x - 1, y - 1] = Condition.Blocked.ToString();
+                availbleAreana.Remove((y - 1) * 10 + x - 1);
             }
         }
         void AreasColors()
@@ -1167,11 +1189,16 @@ namespace statki
 
                 }
             }
-            if(CheckWin())
+            if (CheckWin())
             {
                 move = "Koniec";
+                DialogResult dialogResult = MessageBox.Show($"Wygra³ {winner}" + Environment.NewLine + "Klikniêcie OK spowoduje zamkniecie programu", "Zwyciê¿ca", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.OK)
+                {
+                    this.Close();
+                }
             }
-            
+
         }
         bool CheckWin()
         {
@@ -1187,7 +1214,31 @@ namespace statki
                     }
                 }
             }
-            return Win;
+            if (Win)
+            {
+                winner = "Gracz";
+                return Win;
+            }
+
+            Win = true;
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    if (areasPlayer[x, y] == Condition.Ship.ToString())
+                    {
+                        Win = false;
+                        break;
+                    }
+                }
+            }
+            if (Win)
+            {
+                winner = "Bot";
+                return Win;
+            }
+            return false;
+
         }
         private bool CanPlaceShip1(int x, int y, string[,] areas)
         {
