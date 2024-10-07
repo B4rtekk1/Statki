@@ -39,11 +39,11 @@ namespace statki
             GenerateBotShips();
             GeneratePlayerShips();
             GenerateLabels();
-            
+
         }
 
         void GenerateLabels()
-        { 
+        {
             Label lblPlayer = new Label();
             lblPlayer.Left = 150;
             lblPlayer.Top = 20;
@@ -622,39 +622,48 @@ namespace statki
             int index = 0, x = 0, y = 0;
             await Task.Delay(500);
 
-            if (lastHited1 != -1)
+            if(lastHited1 != -1)
             {
                 for (int i = -1; i < 2; i++)
                 {
-                    newIndex = lastHited1 + i;
-                    available = availbleAreana.Contains(newIndex);
-                    if (available)
+                    if ((lastHited1 + i) % 10 >= 0 && (lastHited1 + i) % 10 <= 9)
                     {
-                        index = newIndex;
-                        x = index % 10;
-                        y = (index - x) / 10;
-                        break;
+                        newIndex = lastHited1 + i;
+                        available = availbleAreana.Contains(newIndex);
+                        if (available)
+                        {
+                            index = newIndex;
+                            x = index % 10;
+                            y = (index - x) / 10;
+                            break;
+                        }
                     }
                 }
-
+                if (!available && lastHited2 != -1)
+                {
+                    for (int i = -1; i < 2; i++)
+                    {
+                        if ((lastHited2 + i) % 10 >= 0 && (lastHited2 + i) % 10 <= 9)
+                        {
+                            newIndex = lastHited2 + i;
+                            available = availbleAreana.Contains(newIndex);
+                            if (available)
+                            {
+                                index = newIndex;
+                                x = index % 10;
+                                y = (index - x) / 10;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!available && lastHited1 != -1)
+            {
 
                 for (int i = -1; i < 2; i++)
                 {
-                    newIndex = lastHited2 + i;
-                    available = availbleAreana.Contains(newIndex);
-                    if (available)
-                    {
-                        index = newIndex;
-                        x = index % 10;
-                        y = (index - x) / 10;
-                        break;
-                    }
-                }
-
-                if (!available)
-                {
-
-                    for (int i = -1; i < 2; i++)
+                    if (lastHited1 + (i * 10) >= 0 && lastHited1 + (i * 10 ) <= 99)
                     {
                         newIndex = lastHited1 + (i * 10);
                         available = availbleAreana.Contains(newIndex);
@@ -666,21 +675,29 @@ namespace statki
                             break;
                         }
                     }
+                    
+                }
+                if(!available && lastHited2 != -1)
+                {
                     for (int i = -1; i < 2; i++)
                     {
-                        newIndex = lastHited2 + (i * 10);
-                        available = availbleAreana.Contains(newIndex);
-                        if (available)
+                        if (lastHited2 + (i * 10) >= 0 && lastHited2 + (i * 10) <= 9)
                         {
-                            index = newIndex;
-                            x = index % 10;
-                            y = (index - x) / 10;
-                            break;
+                            newIndex = lastHited2 + (i * 10);
+                            available = availbleAreana.Contains(newIndex);
+                            if (available)
+                            {
+                                index = newIndex;
+                                x = index % 10;
+                                y = (index - x) / 10;
+                                break;
+                            }
                         }
-                    }
 
+                    }
                 }
             }
+
             if (!available)
             {
                 Random random = new Random();
@@ -705,8 +722,6 @@ namespace statki
                 availbleAreana.Remove(index);
                 BotMove();
             }
-
-
             AreasColors();
         }
 
@@ -1219,25 +1234,27 @@ namespace statki
                 winner = "Gracz";
                 return Win;
             }
-
-            Win = true;
-            for (int x = 0; x < 10; x++)
+            else
             {
-                for (int y = 0; y < 10; y++)
+                Win = true;
+                for (int x = 0; x < 10; x++)
                 {
-                    if (areasPlayer[x, y] == Condition.Ship.ToString())
+                    for (int y = 0; y < 10; y++)
                     {
-                        Win = false;
-                        break;
+                        if (areasPlayer[x, y] == Condition.Ship.ToString())
+                        {
+                            Win = false;
+                            break;
+                        }
                     }
                 }
+                if (Win)
+                {
+                    winner = "Bot";
+                    return Win;
+                }
             }
-            if (Win)
-            {
-                winner = "Bot";
-                return Win;
-            }
-            return false;
+            return Win;
 
         }
         private bool CanPlaceShip1(int x, int y, string[,] areas)
