@@ -621,110 +621,149 @@ namespace statki
             bool available = false;
             int index = 0, x = 0, y = 0;
             await Task.Delay(500);
-
-            if(lastHited1 != -1)
+            int direction = Math.Abs(lastHited1 - lastHited2);
+            //CheckIsFour(lastHited1, lastHited2);
+            if (winner == null)
             {
-                for (int i = -1; i < 2; i++)
+                if (lastHited2 == -1 || direction == 1 || direction == 2)
                 {
-                    if ((lastHited1 + i) % 10 >= 0 && (lastHited1 + i) % 10 <= 9)
+                    if (lastHited1 != -1)
                     {
-                        newIndex = lastHited1 + i;
-                        available = availbleAreana.Contains(newIndex);
-                        if (available)
+                        for (int i = -1; i < 2; i++)
                         {
-                            index = newIndex;
-                            x = index % 10;
-                            y = (index - x) / 10;
-                            break;
-                        }
-                    }
-                }
-                if (!available && lastHited2 != -1)
-                {
-                    for (int i = -1; i < 2; i++)
-                    {
-                        if ((lastHited2 + i) % 10 >= 0 && (lastHited2 + i) % 10 <= 9)
-                        {
-                            newIndex = lastHited2 + i;
-                            available = availbleAreana.Contains(newIndex);
-                            if (available)
+                            if ((lastHited1 + i) % 10 >= 0 && (lastHited1 + i) % 10 <= 9)
                             {
-                                index = newIndex;
-                                x = index % 10;
-                                y = (index - x) / 10;
-                                break;
+                                newIndex = lastHited1 + i;
+
+                                available = availbleAreana.Contains(newIndex);
+                                if (newIndex / 10 != lastHited1 / 10)
+                                {
+                                    available = false;
+                                }
+                                if (available)
+                                {
+                                    index = newIndex;
+                                    x = index % 10;
+                                    y = (index - x) / 10;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!available && lastHited2 != -1)
+                        {
+                            for (int i = -1; i < 2; i++)
+                            {
+                                if ((lastHited2 + i) % 10 >= 0 && (lastHited2 + i) % 10 <= 9)
+                                {
+                                    newIndex = lastHited2 + i;
+                                    available = availbleAreana.Contains(newIndex);
+                                    if (newIndex / 10 != lastHited2 / 10)
+                                    {
+                                        available = false;
+                                    }
+                                    if (available)
+                                    {
+                                        index = newIndex;
+                                        x = index % 10;
+                                        y = (index - x) / 10;
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
-            if (!available && lastHited1 != -1)
-            {
+                if (lastHited2 == -1 || direction == 10 || direction == 20)
+                {
+                    if (!available && lastHited1 != -1)
+                    {
 
-                for (int i = -1; i < 2; i++)
-                {
-                    if (lastHited1 + (i * 10) >= 0 && lastHited1 + (i * 10 ) <= 99)
-                    {
-                        newIndex = lastHited1 + (i * 10);
-                        available = availbleAreana.Contains(newIndex);
-                        if (available)
+                        for (int i = -1; i < 2; i++)
                         {
-                            index = newIndex;
-                            x = index % 10;
-                            y = (index - x) / 10;
-                            break;
-                        }
-                    }
-                    
-                }
-                if(!available && lastHited2 != -1)
-                {
-                    for (int i = -1; i < 2; i++)
-                    {
-                        if (lastHited2 + (i * 10) >= 0 && lastHited2 + (i * 10) <= 9)
-                        {
-                            newIndex = lastHited2 + (i * 10);
-                            available = availbleAreana.Contains(newIndex);
-                            if (available)
+                            if (lastHited1 + (i * 10) >= 0 && lastHited1 + (i * 10) <= 99)
                             {
-                                index = newIndex;
-                                x = index % 10;
-                                y = (index - x) / 10;
-                                break;
+                                newIndex = lastHited1 + (i * 10);
+                                available = availbleAreana.Contains(newIndex);
+                                if (available)
+                                {
+                                    index = newIndex;
+                                    x = index % 10;
+                                    y = (index - x) / 10;
+                                    break;
+                                }
+                            }
+
+                        }
+                        if (!available && lastHited2 != -1)
+                        {
+                            for (int i = -1; i < 2; i++)
+                            {
+                                if (lastHited2 + (i * 10) >= 0 && lastHited2 + (i * 10) <= 99)
+                                {
+                                    newIndex = lastHited2 + (i * 10);
+                                    available = availbleAreana.Contains(newIndex);
+                                    if (available)
+                                    {
+                                        index = newIndex;
+                                        x = index % 10;
+                                        y = (index - x) / 10;
+                                        break;
+                                    }
+                                }
+
                             }
                         }
-
                     }
                 }
+                if (!available)
+                {
+                    Random random = new Random();
+                    randomIndex = random.Next(0, availbleAreana.Count);
+                    index = availbleAreana[randomIndex];
+                    x = index % 10;
+                    y = (index - x) / 10;
+                }
+
+                if (areasPlayer[x, y] == Condition.Empty.ToString())
+                {
+                    areasPlayer[x, y] = Condition.Blocked.ToString();
+                    availbleAreana.Remove(index);
+                    move = "Player";
+                }
+                else if (areasPlayer[x, y] == Condition.Ship.ToString())
+                {
+                    areasPlayer[x, y] = Condition.Hit.ToString();
+                    lastHited2 = lastHited1;
+                    lastHited1 = index;
+                    ShipSunkPlayer(x, y);
+                    availbleAreana.Remove(index);
+                    BotMove();
+                }
+                AreasColors();
             }
 
-            if (!available)
-            {
-                Random random = new Random();
-                randomIndex = random.Next(0, availbleAreana.Count);
-                index = availbleAreana[randomIndex];
-                x = index % 10;
-                y = (index - x) / 10;
-            }
-
-            if (areasPlayer[x, y] == Condition.Empty.ToString())
-            {
-                areasPlayer[x, y] = Condition.Blocked.ToString();
-                availbleAreana.Remove(index);
-                move = "Player";
-            }
-            else if (areasPlayer[x, y] == Condition.Ship.ToString())
-            {
-                areasPlayer[x, y] = Condition.Hit.ToString();
-                lastHited2 = lastHited1;
-                lastHited1 = index;
-                ShipSunkPlayer(x, y);
-                availbleAreana.Remove(index);
-                BotMove();
-            }
-            AreasColors();
+            
         }
+        /*void CheckIsFour(int index1, int index2)
+        {
+            bool isFour = false;
+            if (index1 - index2 == 10)
+            {
+                for (int i = 1 / 10; i < 3; i++)
+                {
+                    isFour = areasBot[index1 % 10, index1 - (i * 10)] == Condition.Hit.ToString();
+                    if (!isFour)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (isFour)
+            {
 
+            }
+        }
+        */
         void ShipSunkBot(int x, int y)
         {
             if (x >= 0 && x < 10 && y >= 0 && y < 10)
@@ -834,11 +873,12 @@ namespace statki
             bool isSunk = false;
 
 
-            if (x > 0 && (areasBot[x - 1, y] == Condition.Ship.ToString() || areasBot[x - 1, y] == Condition.Hit.ToString()))
+            if (x > 0 && (areasBot[x - 1, y] == Condition.Hit.ToString() || areasBot[x - 1, y] == Condition.Ship.ToString()))
             {
+                //if()
                 for (int i = x; i > x - 4; i--)
                 {
-                    if (i < 0)
+                    if (i < 0 || areasBot[i, y] == Condition.Empty.ToString() || areasBot[i, y] == Condition.Blocked.ToString())
                     {
                         break;
                     }
@@ -849,16 +889,17 @@ namespace statki
                     }
                     if (areasBot[i, y] == Condition.Ship.ToString())
                     {
+                        loops1 = 0;
                         isSunk = false;
                         break;
                     }
                 }
             }
-            if (x < 9 && (areasBot[x + 1, y] == Condition.Ship.ToString() || areasBot[x + 1, y] == Condition.Hit.ToString()))
+            if (x < 9 && (areasBot[x + 1, y] == Condition.Hit.ToString() || areasBot[x + 1, y] == Condition.Ship.ToString()))
             {
                 for (int i = x; i < x + 4; i++)
                 {
-                    if (i > 9)
+                    if (i > 9 || areasBot[i, y] == Condition.Empty.ToString() || areasBot[i, y] == Condition.Blocked.ToString())
                     {
                         break;
                     }
@@ -869,6 +910,7 @@ namespace statki
                     }
                     if (areasBot[i, y] == Condition.Ship.ToString())
                     {
+                        loops2 = 0;
                         isSunk = false;
                         break;
                     }
@@ -891,11 +933,11 @@ namespace statki
             loops1 = 0;
             loops2 = 0;
             isSunk = false;
-            if (y > 0 && (areasBot[x, y - 1] == Condition.Ship.ToString() || areasBot[x, y - 1] == Condition.Hit.ToString()))
+            if (y > 0 && areasBot[x, y - 1] == Condition.Hit.ToString())
             {
                 for (int i = y; i > y - 4; i--)
                 {
-                    if (i < 0)
+                    if (i < 0 || areasBot[x, i] == Condition.Empty.ToString() || areasBot[x, i] == Condition.Blocked.ToString())
                     {
                         break;
                     }
@@ -906,16 +948,17 @@ namespace statki
                     }
                     if (areasBot[x, i] == Condition.Ship.ToString())
                     {
+                        loops1 = 0;
                         isSunk = false;
                         break;
                     }
                 }
             }
-            if (y < 9 && (areasBot[x, y + 1] == Condition.Ship.ToString() || areasBot[x, y + 1] == Condition.Hit.ToString()))
+            if (y < 9 && areasBot[x, y + 1] == Condition.Hit.ToString())
             {
                 for (int i = y; i < y + 4; i++)
                 {
-                    if (i > 9)
+                    if (i > 9 || areasBot[x, i] == Condition.Empty.ToString() || areasBot[x, i] == Condition.Blocked.ToString())
                     {
                         break;
                     }
@@ -926,6 +969,7 @@ namespace statki
                     }
                     if (areasBot[x, i] == Condition.Ship.ToString())
                     {
+                        loops2 = 0;
                         isSunk = false;
                         break;
                     }
@@ -938,6 +982,7 @@ namespace statki
                 {
                     areasBot[x, y - i] = Condition.Sunk.ToString();
                     BlockAreasBot(x, y - i);
+
                 }
                 for (int i = 0; i < loops2; i++)
                 {
@@ -953,11 +998,12 @@ namespace statki
             bool isSunk = false;
 
 
-            if (x > 0 && (areasPlayer[x - 1, y] == Condition.Ship.ToString() || areasPlayer[x - 1, y] == Condition.Hit.ToString()))
+            if (x > 0 && (areasPlayer[x - 1, y] == Condition.Hit.ToString() || areasPlayer[x - 1, y] == Condition.Ship.ToString()))
             {
+                //if()
                 for (int i = x; i > x - 4; i--)
                 {
-                    if (i < 0)
+                    if (i < 0 || areasPlayer[i, y] == Condition.Empty.ToString() || areasPlayer[i, y] == Condition.Blocked.ToString())
                     {
                         break;
                     }
@@ -968,16 +1014,17 @@ namespace statki
                     }
                     if (areasPlayer[i, y] == Condition.Ship.ToString())
                     {
+                        loops1 = 0;
                         isSunk = false;
                         break;
                     }
                 }
             }
-            if (x < 9 && (areasPlayer[x + 1, y] == Condition.Ship.ToString() || areasPlayer[x + 1, y] == Condition.Hit.ToString()))
+            if (x < 9 && (areasPlayer[x + 1, y] == Condition.Hit.ToString() || areasPlayer[x + 1, y] == Condition.Ship.ToString()))
             {
                 for (int i = x; i < x + 4; i++)
                 {
-                    if (i > 9)
+                    if (i > 9 || areasPlayer[i, y] == Condition.Empty.ToString() || areasPlayer[i, y] == Condition.Blocked.ToString())
                     {
                         break;
                     }
@@ -988,6 +1035,7 @@ namespace statki
                     }
                     if (areasPlayer[i, y] == Condition.Ship.ToString())
                     {
+                        loops2 = 0;
                         isSunk = false;
                         break;
                     }
@@ -1010,11 +1058,11 @@ namespace statki
             loops1 = 0;
             loops2 = 0;
             isSunk = false;
-            if (y > 0 && (areasPlayer[x, y - 1] == Condition.Ship.ToString() || areasPlayer[x, y - 1] == Condition.Hit.ToString()))
+            if (y > 0 && areasPlayer[x, y - 1] == Condition.Hit.ToString())
             {
                 for (int i = y; i > y - 4; i--)
                 {
-                    if (i < 0)
+                    if (i < 0 || areasPlayer[x, i] == Condition.Empty.ToString() || areasPlayer[x, i] == Condition.Blocked.ToString())
                     {
                         break;
                     }
@@ -1025,16 +1073,17 @@ namespace statki
                     }
                     if (areasPlayer[x, i] == Condition.Ship.ToString())
                     {
+                        loops1 = 0;
                         isSunk = false;
                         break;
                     }
                 }
             }
-            if (y < 9 && (areasPlayer[x, y + 1] == Condition.Ship.ToString() || areasPlayer[x, y + 1] == Condition.Hit.ToString()))
+            if (y < 9 && areasPlayer[x, y + 1] == Condition.Hit.ToString())
             {
                 for (int i = y; i < y + 4; i++)
                 {
-                    if (i > 9)
+                    if (i > 9 || areasPlayer[x, i] == Condition.Empty.ToString() || areasPlayer[x, i] == Condition.Blocked.ToString())
                     {
                         break;
                     }
@@ -1045,6 +1094,7 @@ namespace statki
                     }
                     if (areasPlayer[x, i] == Condition.Ship.ToString())
                     {
+                        loops2 = 0;
                         isSunk = false;
                         break;
                     }
@@ -1063,10 +1113,10 @@ namespace statki
                 {
                     areasPlayer[x, y + i] = Condition.Sunk.ToString();
                     BlockAreasPlayer(x, y + i);
-
                 }
             }
         }
+
         void BlockAreasBot(int x, int y)
         {
             if (x < 9 && areasBot[x + 1, y] == Condition.Empty.ToString())
