@@ -265,13 +265,7 @@ namespace statki
                     }
                 }
             }
-
-
-
-
         }
-
-
         void GeneratePlayerShips()
         {
             //czworki gracz
@@ -549,7 +543,6 @@ namespace statki
             }
 
         }
-
         void CreateBotButtons()
         {
             int buttonSize = 25;
@@ -632,14 +625,14 @@ namespace statki
 
             }
         }
-
-
         async void BotMove()
         {
             int newIndex, randomIndex;
             bool available = false;
             int index = 0, x = 0, y = 0;
+            //Cursor.Current = Cursors.WaitCursor;
             await Task.Delay(500);
+            
             int direction1 = Math.Abs(lastHited1 - lastHited2);
             if (winner == null)
             {
@@ -748,6 +741,7 @@ namespace statki
                 {
                     areasPlayer[x, y] = Condition.Blocked.ToString();
                     availbleAreana.Remove(index);
+                    //Cursor.Current = Cursors.Default;
                     move = "Player";
                 }
                 else if (areasPlayer[x, y] == Condition.Ship.ToString())
@@ -812,8 +806,6 @@ namespace statki
                 }
 
             }
-
-
         }
         void ShipSunkPlayer(int x, int y)
         {
@@ -1318,13 +1310,21 @@ namespace statki
             if (CheckWin())
             {
                 move = "Koniec";
-                DialogResult dialogResult = MessageBox.Show($"Wygra³ {winner}" + Environment.NewLine + "Klikniêcie OK spowoduje zamkniecie programu", "Zwyciê¿ca", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (dialogResult == DialogResult.OK)
+                DialogResult dialogResult = MessageBox.Show($"Wygra³ {winner}" + Environment.NewLine + "Zamkn¹æ program?", "Koniec gry",MessageBoxButtons.YesNo , MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.Yes)
                 {
                     this.Close();
                 }
             }
 
+        }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult dialogresult = MessageBox.Show("Czy napewno chcesz zamkn¹æ program?", "Zamykanie aplikacji", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogresult == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
         }
         bool CheckWin()
         {
@@ -1389,10 +1389,7 @@ namespace statki
 
             return false; // poza granicami
         }
-
     }
-
-
     public class Ship
     {
         public int ship1Count = 4;
@@ -1400,7 +1397,6 @@ namespace statki
         public int ship3Count = 2;
         public int ship4Count = 1;
     }
-
     public enum Condition
     {
         Ship,
