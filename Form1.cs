@@ -257,7 +257,6 @@ namespace statki
                 {
                     areaX = shipPosition.Next(0, 10);
                     areaY = shipPosition.Next(0, 10);
-                    //CanPlaceShip(areaX, areaY, areas);
                     if (CanPlaceShip1(areaX, areaY, areasBot))
                     {
                         placed = true;
@@ -1309,8 +1308,22 @@ namespace statki
             }
             if (CheckWin())
             {
+                int index;
                 move = "Koniec";
-                DialogResult dialogResult = MessageBox.Show($"Wygra³ {winner}" + Environment.NewLine + "Zamkn¹æ program?", "Koniec gry",MessageBoxButtons.YesNo , MessageBoxIcon.Question);
+                
+                for (int i = 0; i < 10; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if (areasBot[i, j] == Condition.Ship.ToString())
+                        {
+                            index = j * 10 + i;
+                            Button brn = (Button)this.Controls[index];
+                            brn.BackColor = Color.Green;
+                        }
+                    }
+                }
+                DialogResult dialogResult = MessageBox.Show($"Wygra³ {winner}" + Environment.NewLine + "Zamkn¹æ program?", "Koniec gry", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.Yes)
                 {
                     this.Close();

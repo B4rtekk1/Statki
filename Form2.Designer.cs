@@ -39,16 +39,17 @@
             label3 = new Label();
             label4 = new Label();
             lblInfo = new Label();
+            label1 = new Label();
             SuspendLayout();
             // 
             // lblInfAre
             // 
             lblInfAre.AutoSize = true;
-            lblInfAre.Location = new Point(487, 9);
+            lblInfAre.Location = new Point(487, 20);
             lblInfAre.Name = "lblInfAre";
-            lblInfAre.Size = new Size(52, 20);
+            lblInfAre.Size = new Size(85, 20);
             lblInfAre.TabIndex = 0;
-            lblInfAre.Text = "Kolory";
+            lblInfAre.Text = "Oznaczenia";
             // 
             // btnAva
             // 
@@ -88,7 +89,7 @@
             btnBlo.BackColor = Color.Gray;
             btnBlo.FlatAppearance.BorderSize = 0;
             btnBlo.FlatStyle = FlatStyle.Flat;
-            btnBlo.Location = new Point(487, 150);
+            btnBlo.Location = new Point(487, 152);
             btnBlo.Name = "btnBlo";
             btnBlo.Size = new Size(25, 25);
             btnBlo.TabIndex = 4;
@@ -97,7 +98,7 @@
             // lblAva
             // 
             lblAva.AutoSize = true;
-            lblAva.Location = new Point(518, 59);
+            lblAva.Location = new Point(518, 62);
             lblAva.Name = "lblAva";
             lblAva.Size = new Size(107, 20);
             lblAva.TabIndex = 5;
@@ -106,7 +107,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(518, 88);
+            label2.Location = new Point(518, 95);
             label2.Name = "label2";
             label2.Size = new Size(105, 20);
             label2.TabIndex = 6;
@@ -117,33 +118,45 @@
             label3.AutoSize = true;
             label3.Location = new Point(518, 124);
             label3.Name = "label3";
-            label3.Size = new Size(52, 20);
+            label3.Size = new Size(120, 20);
             label3.TabIndex = 7;
-            label3.Text = "Kolory";
+            label3.Text = "Statek zatopiony";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(518, 155);
+            label4.Location = new Point(518, 157);
             label4.Name = "label4";
-            label4.Size = new Size(52, 20);
+            label4.Size = new Size(128, 20);
             label4.TabIndex = 8;
-            label4.Text = "Kolory";
+            label4.Text = "Niedostępne pole";
             // 
             // lblInfo
             // 
             lblInfo.AutoSize = true;
-            lblInfo.Location = new Point(36, 88);
+            lblInfo.Font = new Font("Segoe UI", 12F);
+            lblInfo.Location = new Point(35, 88);
             lblInfo.Name = "lblInfo";
-            lblInfo.Size = new Size(340, 40);
+            lblInfo.Size = new Size(339, 84);
             lblInfo.TabIndex = 9;
-            lblInfo.Text = "Zaczyna gracz. Ruchy wykonywane na zmiane.\r\nPo trafionym statku gracz/bot ma dodatkowy ruch";
+            lblInfo.Text = "Zaczyna gracz. Ruchy wykonywane na\r\nzmiane.Po trafionym statku gracz/bot\r\nma dodatkowy ruch";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 19F);
+            label1.Location = new Point(116, 20);
+            label1.Name = "label1";
+            label1.Size = new Size(156, 45);
+            label1.TabIndex = 10;
+            label1.Text = "Instrukcja";
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(677, 260);
+            Controls.Add(label1);
             Controls.Add(lblInfo);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -174,5 +187,6 @@
         private Label label3;
         private Label label4;
         private Label lblInfo;
+        private Label label1;
     }
 }
